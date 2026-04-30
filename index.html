@@ -526,9 +526,71 @@
 
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    @media (max-width: 600px) {
-      #grid-container { columns: 2 140px; padding: 70px 10px 90px; }
+
+    /* ════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════ */
+
+    /* Tablet */
+    @media (max-width: 768px) {
+      #grid-container { columns: 3 160px; }
+      .lightbox-card { max-width: 96vw; }
+    }
+
+    /* Mobile */
+    @media (max-width: 540px) {
+      /* Header: hide secondary elements, keep core */
+      .header-sep { display: none; }
       .showing-badge { display: none; }
+      .header-title .count { display: none; }
+      .header-top { gap: 6px; padding: 0 10px; }
+      .search-box { min-width: 0; font-size: 16px; /* prevent iOS zoom */ }
+
+      /* Cards */
+      .main { padding: 10px; }
+      .card { padding: 10px 12px; }
+      /* Always show the queue icon on mobile (no hover) */
+      .btn-icon { opacity: 1; pointer-events: auto; }
+
+      /* Grid */
+      #grid-container { columns: 2 130px; column-gap: 8px; padding: 70px 8px 100px; }
+      .grid-item { margin-bottom: 8px; border-radius: 16px; }
+      .grid-item img.gi-img { border-radius: 16px; }
+      .grid-item .gi-text-card { border-radius: 16px; padding: 14px; min-height: 100px; }
+      .gi-text-card .gi-body { font-size: 12px; -webkit-line-clamp: 5; }
+      .grid-filter-pill { font-size: 12px; padding: 8px 14px; top: 12px; }
+      .grid-close-btn { top: 12px; right: 12px; width: 36px; height: 36px; }
+      .grid-dropdown { top: 60px; min-width: 160px; max-height: 50vh; }
+      .grid-pager { padding: 6px 12px; gap: 6px; bottom: 12px; }
+      .grid-pager-info { font-size: 11px; }
+
+      /* Lightbox: bottom sheet on mobile */
+      .lightbox-overlay { align-items: flex-end; }
+      .lightbox-card {
+        width: 100vw; max-width: 100vw;
+        max-height: 92vh;
+        border-radius: 24px 24px 0 0;
+        transform: translateY(20px);
+      }
+      .lightbox-overlay.active .lightbox-card { transform: translateY(0); }
+      .lb-img-wrap img { max-height: 280px; border-radius: 24px 24px 0 0; }
+      .lb-body { padding: 14px 16px 32px; /* safe area bottom */ }
+      .lb-text { font-size: 14px; }
+      .lb-btn { height: 40px; font-size: 14px; } /* bigger tap targets */
+      .lb-close { top: 10px; right: 10px; width: 32px; height: 32px; }
+
+      /* Queue bar: full width */
+      .queue-bar {
+        width: calc(100vw - 24px);
+        min-width: unset;
+        bottom: 12px;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 360px) {
+      #grid-container { columns: 2 110px; }
+      .view-tab { padding: 0 7px; font-size: 10px; }
     }
   </style>
 </head>
