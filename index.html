@@ -42,7 +42,6 @@
       --card-radius:      var(--radius);
       --card-text-size:   13px;
     }
-
     [data-theme="light"] {
       --bg:               #f6f6f6;
       --panel:            #ffffff;
@@ -71,7 +70,9 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Header ── */
+    /* ════════════════════════════════════════
+       HEADER
+    ════════════════════════════════════════ */
     .header {
       position: sticky; top: 0; z-index: 100;
       background: var(--header-bg);
@@ -127,7 +128,7 @@
     .view-tab.active { background: var(--surface-hover); color: var(--text-label); }
     .view-tab:hover:not(.active) { color: var(--text-secondary); }
 
-    /* ── Category pill bar ── */
+    /* ── Category pills ── */
     .cat-bar {
       display: flex; align-items: center; gap: 4px;
       padding: 0 16px; height: 40px;
@@ -152,11 +153,12 @@
     .pill-count { font-family: var(--font-mono); font-size: 10px; font-weight: 400; opacity: 0.6; }
     .cat-pill.active .pill-count { opacity: 1; }
 
-    /* ── Main layout ── */
+    /* ════════════════════════════════════════
+       LIST VIEW
+    ════════════════════════════════════════ */
     .main { max-width: 860px; margin: 0 auto; padding: 16px; }
-
-    /* ── Cards ── */
     .cards { display: flex; flex-direction: column; gap: var(--card-gap); }
+
     .card {
       position: relative; background: var(--surface);
       border: 1px solid var(--border); border-radius: var(--card-radius);
@@ -168,8 +170,6 @@
       border-color: color-mix(in srgb, var(--danger) 50%, transparent);
       background: color-mix(in srgb, var(--danger) 4%, var(--surface));
     }
-
-    /* ── Card header ── */
     .card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
     .avatar {
       width: 28px; height: 28px; border-radius: 50%;
@@ -180,14 +180,9 @@
       font-size: 12px; font-weight: 500; color: var(--text);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;
     }
-    .author-handle {
-      font-family: var(--font-mono); font-size: 10px;
-      color: var(--text-tertiary); line-height: 1.3;
-    }
+    .author-handle { font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); line-height: 1.3; }
     .card-meta { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
     .card-date { font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); white-space: nowrap; }
-
-    /* ── Queue icon button ── */
     .btn-icon {
       background: none; border: none; cursor: pointer;
       width: 26px; height: 26px;
@@ -200,8 +195,6 @@
     .btn-icon:hover { background: var(--surface-hover); color: var(--text-label); }
     .btn-icon.queued-icon { opacity: 1; pointer-events: auto; color: var(--danger); }
     .btn-icon.queued-icon:hover { background: rgba(244,33,46,0.12); }
-
-    /* ── Card body ── */
     .card-text {
       font-size: var(--card-text-size); line-height: 1.6;
       color: var(--text-label); white-space: pre-wrap;
@@ -213,11 +206,9 @@
       border-radius: var(--radius-sm); object-fit: cover;
       border: 1px solid var(--border);
     }
-
-    /* ── Card footer ── */
     .card-footer { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
     .cat-badge {
-      display: inline-flex; align-items: center; gap: 3px;
+      display: inline-flex; align-items: center;
       padding: 0 7px; height: 20px; border-radius: var(--radius-sm);
       font-size: 11px; font-weight: 500; white-space: nowrap;
       background: color-mix(in srgb, var(--cat-color, #555) 14%, transparent);
@@ -228,11 +219,6 @@
       display: flex; gap: 10px; margin-left: auto;
       font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary);
     }
-
-    /* ── Grid view ── */
-    .grid-wrap { columns: 3 260px; column-gap: 8px; }
-    .grid-wrap .card { break-inside: avoid; margin-bottom: 8px; cursor: pointer; }
-    .grid-wrap .card-media img { max-height: 180px; max-width: 100%; width: 100%; }
 
     /* ── Pagination ── */
     .pagination {
@@ -250,35 +236,284 @@
     .btn:disabled { opacity: 0.3; cursor: default; }
     .page-info { font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); }
 
-    /* ── Loading / empty ── */
-    .state-msg {
-      text-align: center; padding: 60px 20px;
-      color: var(--text-tertiary); font-size: 13px;
-    }
+    /* ── State ── */
+    .state-msg { text-align: center; padding: 60px 20px; color: var(--text-tertiary); font-size: 13px; }
     .spinner {
       width: 20px; height: 20px; border: 2px solid var(--border);
       border-top-color: var(--accent); border-radius: 50%;
-      animation: spin 0.75s linear infinite; display: inline-block;
-      margin-bottom: 10px;
+      animation: spin 0.75s linear infinite; display: inline-block; margin-bottom: 10px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Queue bar (bottom floating) ── */
+    /* ════════════════════════════════════════
+       GRID VIEW  (twitter-bookmarks-grid style)
+    ════════════════════════════════════════ */
+    body.grid-mode { overflow: hidden; }
+
+    #grid-viewport {
+      display: none;
+      position: fixed; inset: 0; z-index: 50;
+      background: #0a0a0a;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.15) transparent;
+    }
+    #grid-viewport.active { display: block; }
+    #grid-viewport::-webkit-scrollbar { width: 6px; }
+    #grid-viewport::-webkit-scrollbar-track { background: transparent; }
+    #grid-viewport::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+
+    #grid-container {
+      columns: 5 200px;
+      column-gap: 10px;
+      padding: 80px 18px 100px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .grid-item {
+      break-inside: avoid;
+      margin-bottom: 10px;
+      border-radius: 24px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      background: #1a1a1a;
+    }
+
+    /* image card */
+    .grid-item img.gi-img {
+      width: 100%; display: block;
+      object-fit: cover;
+      border-radius: 24px;
+      transition: filter 0.3s ease;
+      pointer-events: none;
+    }
+    .grid-item:hover img.gi-img { filter: brightness(1.08); }
+
+    /* text-only card */
+    .grid-item .gi-text-card {
+      padding: 18px;
+      min-height: 120px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      background: #181818;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .gi-text-card .gi-author {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    }
+    .gi-text-card .gi-avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      object-fit: cover; flex-shrink: 0; background: #2a2a2a;
+    }
+    .gi-text-card .gi-handle {
+      font-size: 11px; color: rgba(255,255,255,0.4);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .gi-text-card .gi-body {
+      font-size: 13px; line-height: 1.5;
+      color: rgba(255,255,255,0.85);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      display: -webkit-box; -webkit-line-clamp: 6;
+      -webkit-box-orient: vertical; overflow: hidden;
+      flex: 1;
+    }
+
+    /* hover overlay on image cards */
+    .grid-item .gi-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+      opacity: 0; transition: opacity 0.25s ease;
+      border-radius: 24px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 14px;
+    }
+    .grid-item:hover .gi-overlay { opacity: 1; }
+    .gi-overlay .gi-ov-name {
+      font-size: 12px; font-weight: 500; color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .gi-overlay .gi-ov-handle {
+      font-size: 11px; color: rgba(255,255,255,0.55);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* grid overlay controls */
+    .grid-filter-pill {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      z-index: 55;
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 18px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 100px;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px; font-weight: 500;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background 0.2s ease;
+      user-select: none; white-space: nowrap;
+    }
+    .grid-filter-pill:hover { background: rgba(255,255,255,0.18); }
+    .grid-filter-pill svg { opacity: 0.7; }
+
+    .grid-close-btn {
+      position: fixed; top: 20px; right: 20px; z-index: 55;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      transition: background 0.2s ease;
+    }
+    .grid-close-btn:hover { background: rgba(255,255,255,0.2); }
+
+    /* category dropdown in grid mode */
+    .grid-dropdown {
+      position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+      z-index: 55; min-width: 200px;
+      padding: 6px;
+      background: rgba(30,30,30,0.95);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      transform: translateX(-50%) translateY(-6px);
+      max-height: 60vh; overflow-y: auto;
+    }
+    .grid-dropdown.open {
+      opacity: 1; pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .grid-dropdown-item {
+      display: block; width: 100%;
+      padding: 8px 14px; border-radius: 18px;
+      background: none; border: none;
+      color: rgba(255,255,255,0.6);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px; text-align: left; cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .grid-dropdown-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .grid-dropdown-item.active { color: #fff; font-weight: 600; }
+
+    /* grid pagination bar */
+    .grid-pager {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      z-index: 55;
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px;
+      background: rgba(30,30,30,0.9);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    .grid-pager-btn {
+      padding: 4px 14px; border-radius: 100px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff; font-size: 13px; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .grid-pager-btn:hover { background: rgba(255,255,255,0.2); }
+    .grid-pager-btn:disabled { opacity: 0.3; cursor: default; }
+    .grid-pager-info { font-size: 12px; color: rgba(255,255,255,0.55); padding: 0 4px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+
+    /* ════════════════════════════════════════
+       LIGHTBOX
+    ════════════════════════════════════════ */
+    .lightbox-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s cubic-bezier(0.25,1,0.5,1);
+    }
+    .lightbox-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .lightbox-card {
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      max-width: 560px; width: 90vw;
+      max-height: 88vh; overflow-y: auto;
+      transform: scale(0.94) translateY(8px);
+      transition: transform 0.25s cubic-bezier(0.25,1,0.5,1);
+      scrollbar-width: none;
+    }
+    .lightbox-card::-webkit-scrollbar { display: none; }
+    .lightbox-overlay.active .lightbox-card { transform: scale(1) translateY(0); }
+
+    .lb-img-wrap { position: relative; }
+    .lb-img-wrap img {
+      width: 100%; display: block;
+      border-radius: 24px 24px 0 0;
+      object-fit: cover; max-height: 400px;
+    }
+    .lb-body { padding: 18px 20px 22px; }
+    .lb-author {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    }
+    .lb-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      object-fit: cover; background: #2a2a2a;
+    }
+    .lb-name { font-size: 14px; font-weight: 600; color: #fff; line-height: 1.2; }
+    .lb-handle { font-size: 12px; color: rgba(255,255,255,0.45); font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+    .lb-text {
+      font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.88);
+      white-space: pre-wrap; word-break: break-word; margin-bottom: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      letter-spacing: -0.01em;
+    }
+    .lb-actions {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .lb-btn {
+      height: 36px; padding: 0 16px; border-radius: 100px;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.1); color: #fff;
+      transition: background 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .lb-btn:hover { background: rgba(255,255,255,0.18); }
+    .lb-btn.danger { background: rgba(244,33,46,0.2); border-color: rgba(244,33,46,0.4); color: #ff6b7a; }
+    .lb-btn.danger:hover { background: rgba(244,33,46,0.3); }
+    .lb-btn.queued { background: rgba(244,33,46,0.15); border-color: rgba(244,33,46,0.35); color: #ff6b7a; }
+
+    .lb-close {
+      position: absolute; top: 14px; right: 14px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15);
+      color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(8px); transition: background 0.2s;
+      z-index: 2;
+    }
+    .lb-close:hover { background: rgba(0,0,0,0.7); }
+
+    /* ── Queue bar ── */
     .queue-bar {
       position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-      z-index: 200; background: var(--panel);
+      z-index: 300; background: var(--panel);
       border: 1px solid var(--border-hover);
       border-radius: var(--radius-lg); padding: 8px 12px;
       display: flex; align-items: center; gap: 8px;
-      box-shadow: var(--shadow); min-width: 340px;
+      box-shadow: var(--shadow); min-width: 320px;
       transition: opacity 0.15s, transform 0.15s;
       backdrop-filter: blur(var(--blur));
     }
     .queue-bar.hidden { opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(10px); }
-    .queue-label {
-      font-size: 12px; font-weight: 500;
-      color: var(--text-label); flex: 1;
-    }
+    .queue-label { font-size: 12px; font-weight: 500; color: var(--text-label); flex: 1; }
     .queue-label span { font-family: var(--font-mono); color: var(--danger); }
     .q-btn {
       height: 28px; padding: 0 12px; border-radius: var(--radius-sm);
@@ -287,25 +522,20 @@
     }
     .q-btn:hover { opacity: 0.85; }
     .q-btn.download { background: var(--danger); color: #fff; }
-    .q-btn.clear {
-      background: none; color: var(--text-tertiary);
-      border: none; font-size: 16px; padding: 0 6px; height: 28px;
-      display: flex; align-items: center;
-    }
+    .q-btn.clear { background: none; color: var(--text-tertiary); border: none; font-size: 18px; padding: 0 6px; }
 
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
-
     @media (max-width: 600px) {
-      .grid-wrap { columns: 1; }
-      .header-top { gap: 6px; }
+      #grid-container { columns: 2 140px; padding: 70px 10px 90px; }
       .showing-badge { display: none; }
     }
   </style>
 </head>
 <body>
 
-<div class="header">
+<!-- ════ HEADER ════ -->
+<div class="header" id="header">
   <div class="header-top">
     <span class="header-title">Bookmarks <span class="count" id="total-label"></span></span>
     <div class="header-sep"></div>
@@ -322,6 +552,7 @@
   <div class="cat-bar" id="cat-bar"></div>
 </div>
 
+<!-- ════ LIST VIEW ════ -->
 <div class="main" id="main">
   <div id="cards-wrap">
     <div class="state-msg" id="loading-msg">
@@ -331,37 +562,81 @@
   <div class="pagination" id="pagination"></div>
 </div>
 
-<!-- Queue bar -->
+<!-- ════ GRID VIEW ════ -->
+<div id="grid-viewport">
+  <button class="grid-filter-pill" id="grid-filter-pill" onclick="toggleGridDropdown()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+    <span id="grid-filter-label">All</span>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+  <div class="grid-dropdown" id="grid-dropdown"></div>
+  <button class="grid-close-btn" onclick="setView('list')" title="Back to list">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <div id="grid-container"></div>
+  <div class="grid-pager" id="grid-pager">
+    <button class="grid-pager-btn" id="gp-prev" onclick="gridPage(-1)">←</button>
+    <span class="grid-pager-info" id="gp-info"></span>
+    <button class="grid-pager-btn" id="gp-next" onclick="gridPage(1)">→</button>
+  </div>
+</div>
+
+<!-- ════ LIGHTBOX ════ -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox(event)">
+  <div class="lightbox-card" id="lb-card">
+    <div class="lb-img-wrap" id="lb-img-wrap"></div>
+    <div class="lb-body">
+      <div class="lb-author">
+        <img class="lb-avatar" id="lb-avatar" src="" alt="">
+        <div>
+          <div class="lb-name" id="lb-name"></div>
+          <div class="lb-handle" id="lb-handle"></div>
+        </div>
+      </div>
+      <div class="lb-text" id="lb-text"></div>
+      <div class="lb-actions">
+        <a class="lb-btn" id="lb-open" href="#" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open tweet
+        </a>
+        <button class="lb-btn" id="lb-queue-btn" onclick="lbToggleQueue()">
+          🗑 Queue for deletion
+        </button>
+      </div>
+    </div>
+    <button class="lb-close" onclick="closeLightbox()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ════ QUEUE BAR ════ -->
 <div class="queue-bar hidden" id="queue-bar">
   <div class="queue-label">Queued: <span id="queue-count">0</span></div>
   <button class="q-btn download" onclick="downloadQueue()">⬇ Download JSON</button>
-  <button class="q-btn clear" onclick="clearQueue()" title="Clear queue">×</button>
+  <button class="q-btn clear" onclick="clearQueue()" title="Clear">×</button>
 </div>
 
 <script>
-// ── Category metadata ──
+// ── Category colors ──
 const CAT_META = {
-  'design':          '#7c3aed',
-  'development':     '#0ea5e9',
-  'creative-coding': '#ec4899',
-  'art':             '#f59e0b',
-  'ai':              '#10b981',
-  'career':          '#6366f1',
-  'product':         '#f97316',
-  'writing':         '#14b8a6',
-  'science':         '#84cc16',
-  'hardware':        '#94a3b8',
-  'pop-culture':     '#fb7185',
-  'other':           '#6b7280',
+  'design': '#7c3aed', 'development': '#0ea5e9', 'creative-coding': '#ec4899',
+  'art': '#f59e0b', 'ai': '#10b981', 'career': '#6366f1',
+  'product': '#f97316', 'writing': '#14b8a6', 'science': '#84cc16',
+  'hardware': '#94a3b8', 'pop-culture': '#fb7185', 'other': '#6b7280',
 };
 const catColor = c => CAT_META[c] || '#6b7280';
-const catLabel = c => c ? c.charAt(0).toUpperCase() + c.slice(1).replace(/-/g, ' ') : '';
+const catLabel = c => c ? c.charAt(0).toUpperCase() + c.slice(1).replace(/-/g,' ') : 'Uncategorized';
 
 // ── State ──
 let ALL = [], filtered = [], currentCat = 'all', currentPage = 1, currentView = 'list';
-const PAGE_SIZE = 30;
+let gridPage_num = 1;
+const GRID_PAGE = 80, LIST_PAGE = 30;
 let debTimer = null;
 let pending = new Set(JSON.parse(localStorage.getItem('pending-deletions') || '[]'));
+let lbBookmark = null;
+let gridDropdownOpen = false;
+let gridCat = 'all';
 
 // ── Theme ──
 function applyTheme() {
@@ -370,10 +645,13 @@ function applyTheme() {
   document.getElementById('theme-btn').textContent = t === 'dark' ? '○' : '☽';
 }
 function toggleTheme() {
-  const cur = localStorage.getItem('theme') === 'light' ? 'dark' : 'light';
-  localStorage.setItem('theme', cur); applyTheme();
+  localStorage.setItem('theme', localStorage.getItem('theme') === 'light' ? 'dark' : 'light');
+  applyTheme();
 }
 applyTheme();
+
+// ── Escape ──
+const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 // ── Load data ──
 fetch('./bookmarks.json')
@@ -382,6 +660,7 @@ fetch('./bookmarks.json')
     ALL = data;
     document.getElementById('total-label').textContent = ALL.length.toLocaleString();
     buildCatBar();
+    buildGridDropdown();
     filter();
     document.getElementById('loading-msg')?.remove();
   })
@@ -390,17 +669,14 @@ fetch('./bookmarks.json')
       '<span style="color:var(--danger)">Could not load bookmarks.json</span>';
   });
 
-// ── Category bar ──
+// ── Category bar (list view) ──
 function buildCatBar() {
   const counts = {};
   ALL.forEach(b => { const c = b.category || 'uncategorized'; counts[c] = (counts[c] || 0) + 1; });
   const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-
   const bar = document.getElementById('cat-bar');
   bar.innerHTML = '';
-
-  const allPill = makePill('all', 'All', ALL.length, '#e8e8e8', true);
-  bar.appendChild(allPill);
+  bar.appendChild(makePill('all', 'All', ALL.length, '#e8e8e8', true));
   sorted.forEach(([cat, cnt]) => bar.appendChild(makePill(cat, catLabel(cat), cnt, catColor(cat))));
 }
 
@@ -418,35 +694,86 @@ function makePill(cat, label, count, color, active = false) {
   return p;
 }
 
-// ── Filter ──
-function filter() {
-  const q = document.getElementById('search').value.toLowerCase().trim();
-  filtered = ALL.filter(b => {
-    if (currentCat !== 'all' && (b.category || 'uncategorized') !== currentCat) return false;
-    if (!q) return true;
-    return (b.text || '').toLowerCase().includes(q)
-        || (b.handle || '').toLowerCase().includes(q)
-        || (b.name || '').toLowerCase().includes(q)
-        || (b.tags || []).some(t => t.toLowerCase().includes(q));
-  });
-  document.getElementById('showing-label').textContent = filtered.length.toLocaleString();
-  currentPage = 1;
-  render();
+// ── Grid dropdown ──
+function buildGridDropdown() {
+  const counts = {};
+  ALL.forEach(b => { const c = b.category || 'uncategorized'; counts[c] = (counts[c]||0)+1; });
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  const dd = document.getElementById('grid-dropdown');
+  dd.innerHTML = '';
+  const addItem = (cat, label, count) => {
+    const btn = document.createElement('button');
+    btn.className = 'grid-dropdown-item' + (cat === gridCat ? ' active' : '');
+    btn.textContent = `${label}  ${count.toLocaleString()}`;
+    btn.onclick = () => {
+      gridCat = cat;
+      document.querySelectorAll('.grid-dropdown-item').forEach(el => el.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('grid-filter-label').textContent = label;
+      toggleGridDropdown(false);
+      gridPage_num = 1;
+      renderGrid();
+    };
+    dd.appendChild(btn);
+  };
+  addItem('all', 'All', ALL.length);
+  sorted.forEach(([cat, cnt]) => addItem(cat, catLabel(cat), cnt));
 }
+
+function toggleGridDropdown(force) {
+  gridDropdownOpen = force !== undefined ? force : !gridDropdownOpen;
+  document.getElementById('grid-dropdown').classList.toggle('open', gridDropdownOpen);
+}
+
+// Close dropdown on outside click
+document.addEventListener('click', e => {
+  if (gridDropdownOpen && !e.target.closest('#grid-filter-pill') && !e.target.closest('#grid-dropdown')) {
+    toggleGridDropdown(false);
+  }
+});
 
 // ── View ──
 function setView(v) {
   currentView = v;
   document.getElementById('tab-list').classList.toggle('active', v === 'list');
   document.getElementById('tab-grid').classList.toggle('active', v === 'grid');
-  render();
+  document.getElementById('header').style.display = v === 'grid' ? 'none' : '';
+  document.getElementById('main').style.display = v === 'grid' ? 'none' : '';
+  document.getElementById('grid-viewport').classList.toggle('active', v === 'grid');
+  document.body.classList.toggle('grid-mode', v === 'grid');
+  // hide queue bar in grid (it shows via lightbox instead)
+  if (v === 'grid') {
+    gridPage_num = 1; gridCat = currentCat;
+    // sync filter label
+    const label = currentCat === 'all' ? 'All' : catLabel(currentCat);
+    document.getElementById('grid-filter-label').textContent = label;
+    renderGrid();
+  } else {
+    document.getElementById('queue-bar').classList.toggle('hidden', pending.size === 0);
+  }
 }
 
-// ── Render ──
-function render() {
+// ── Filter (list) ──
+function filter() {
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  filtered = ALL.filter(b => {
+    if (currentCat !== 'all' && (b.category || 'uncategorized') !== currentCat) return false;
+    if (!q) return true;
+    return (b.text||'').toLowerCase().includes(q)
+        || (b.handle||'').toLowerCase().includes(q)
+        || (b.name||'').toLowerCase().includes(q)
+        || (b.tags||[]).some(t => t.toLowerCase().includes(q));
+  });
+  document.getElementById('showing-label').textContent = filtered.length.toLocaleString();
+  currentPage = 1;
+  renderList();
+}
+
+// ── Render list ──
+function renderList() {
   const wrap = document.getElementById('cards-wrap');
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const page = filtered.slice(start, start + PAGE_SIZE);
+  const start = (currentPage - 1) * LIST_PAGE;
+  const page = filtered.slice(start, start + LIST_PAGE);
 
   if (filtered.length === 0) {
     wrap.innerHTML = '<div class="state-msg">No bookmarks found</div>';
@@ -455,9 +782,8 @@ function render() {
   }
 
   const container = document.createElement('div');
-  container.className = currentView === 'grid' ? 'grid-wrap' : 'cards';
+  container.className = 'cards';
   page.forEach(b => container.appendChild(makeCard(b)));
-
   wrap.innerHTML = '';
   wrap.appendChild(container);
   renderPagination();
@@ -465,13 +791,8 @@ function render() {
 
 function fmtDate(str) {
   if (!str) return '';
-  try {
-    return new Date(str).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  } catch { return ''; }
-}
-
-function esc(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  try { return new Date(str).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}); }
+  catch { return ''; }
 }
 
 function makeCard(b) {
@@ -479,24 +800,16 @@ function makeCard(b) {
   const div = document.createElement('div');
   div.className = 'card' + (isQueued ? ' queued' : '');
 
-  // Media
-  const imgs = (b.images || []).slice(0, currentView === 'grid' ? 1 : 3);
+  const imgs = (b.images||[]).slice(0,3);
   const mediaHtml = imgs.length
-    ? `<div class="card-media">${imgs.map(u =>
-        `<img src="${esc(u)}" loading="lazy" onerror="this.style.display='none'" alt="">`
-      ).join('')}</div>`
+    ? `<div class="card-media">${imgs.map(u=>`<img src="${esc(u)}" loading="lazy" onerror="this.style.display='none'" alt="">`).join('')}</div>`
     : '';
-
-  // Category badge
   const catHtml = b.category
     ? `<span class="cat-badge" style="--cat-color:${catColor(b.category)}">${esc(catLabel(b.category))}</span>`
     : '';
-
-  // Engagement
   const parts = [];
   if (b.likes)   parts.push(`♥ ${b.likes.toLocaleString()}`);
   if (b.reposts) parts.push(`↻ ${b.reposts.toLocaleString()}`);
-  const engHtml = parts.length ? `<div class="engagement">${parts.map(esc).join(' ')}</div>` : '';
 
   div.innerHTML = `
     <div class="card-header">
@@ -507,92 +820,191 @@ function makeCard(b) {
       </div>
       <div class="card-meta">
         <span class="card-date">${fmtDate(b.postedAt)}</span>
-        <button class="btn-icon ${isQueued ? 'queued-icon' : ''}" title="${isQueued ? 'Remove from queue' : 'Queue for deletion'}" data-id="${esc(b.id)}">
-          ${isQueued ? '🗑' : '🗑'}
-        </button>
+        <button class="btn-icon ${isQueued?'queued-icon':''}" title="${isQueued?'Remove from queue':'Queue for deletion'}" data-id="${esc(b.id)}">🗑</button>
       </div>
     </div>
     <div class="card-text">${esc(b.text)}</div>
     ${mediaHtml}
     <div class="card-footer">
       ${catHtml}
-      ${engHtml}
-    </div>
-  `;
+      ${parts.length ? `<div class="engagement">${parts.join('  ')}</div>` : ''}
+    </div>`;
 
-  // Click card → open tweet
   div.addEventListener('click', e => {
     if (e.target.closest('.btn-icon')) return;
     window.open(b.url, '_blank', 'noopener');
   });
-
-  // Queue button
   div.querySelector('.btn-icon').addEventListener('click', e => {
     e.stopPropagation();
-    if (pending.has(b.id)) pending.delete(b.id);
-    else pending.add(b.id);
-    savePending();
-    // Re-render just this card
+    togglePending(b.id);
     const fresh = makeCard(b);
     div.replaceWith(fresh);
   });
-
   return div;
 }
 
-// ── Pagination ──
+// ── Render grid ──
+function renderGrid() {
+  const src = gridCat === 'all' ? ALL : ALL.filter(b => (b.category||'uncategorized') === gridCat);
+  const start = (gridPage_num - 1) * GRID_PAGE;
+  const page = src.slice(start, start + GRID_PAGE);
+  const totalPages = Math.ceil(src.length / GRID_PAGE);
+
+  const container = document.getElementById('grid-container');
+  container.innerHTML = '';
+  page.forEach(b => container.appendChild(makeGridItem(b)));
+
+  document.getElementById('gp-prev').disabled = gridPage_num <= 1;
+  document.getElementById('gp-next').disabled = gridPage_num >= totalPages;
+  document.getElementById('gp-info').textContent = `${gridPage_num} / ${totalPages}  ·  ${src.length.toLocaleString()} bookmarks`;
+  document.getElementById('grid-viewport').scrollTop = 0;
+}
+
+function gridPage(dir) {
+  const src = gridCat === 'all' ? ALL : ALL.filter(b => (b.category||'uncategorized') === gridCat);
+  const totalPages = Math.ceil(src.length / GRID_PAGE);
+  gridPage_num = Math.max(1, Math.min(totalPages, gridPage_num + dir));
+  renderGrid();
+}
+
+function makeGridItem(b) {
+  const item = document.createElement('div');
+  item.className = 'grid-item';
+
+  const firstImg = (b.images||[])[0];
+  if (firstImg) {
+    item.innerHTML = `
+      <img class="gi-img" src="${esc(firstImg)}" loading="lazy" onerror="this.closest('.grid-item').replaceWith(makeTextGridItem(this._b))" alt="">
+      <div class="gi-overlay">
+        <div class="gi-ov-name">${esc(b.name)}</div>
+        <div class="gi-ov-handle">@${esc(b.handle)}</div>
+      </div>`;
+    // fix onerror reference
+    const img = item.querySelector('img');
+    img._b = b;
+    img.onerror = function() { this.closest('.grid-item').replaceWith(makeTextGridItem(b)); };
+  } else {
+    item.appendChild(makeTextGridItem(b).firstChild || makeTextCardEl(b));
+    item.innerHTML = makeTextCardEl(b);
+  }
+
+  item.addEventListener('click', () => openLightbox(b));
+  return item;
+}
+
+function makeTextCardEl(b) {
+  return `<div class="gi-text-card">
+    <div class="gi-author">
+      <img class="gi-avatar" src="${esc(b.avatar)}" alt="" onerror="this.style.visibility='hidden'">
+      <span class="gi-handle">@${esc(b.handle)}</span>
+    </div>
+    <div class="gi-body">${esc(b.text)}</div>
+  </div>`;
+}
+
+function makeTextGridItem(b) {
+  const item = document.createElement('div');
+  item.className = 'grid-item';
+  item.innerHTML = makeTextCardEl(b);
+  item.addEventListener('click', () => openLightbox(b));
+  return item;
+}
+
+// ── Lightbox ──
+function openLightbox(b) {
+  lbBookmark = b;
+  const firstImg = (b.images||[])[0];
+  const imgWrap = document.getElementById('lb-img-wrap');
+  imgWrap.innerHTML = firstImg
+    ? `<img src="${esc(firstImg)}" alt="" onerror="this.style.display='none'">`
+    : '';
+
+  document.getElementById('lb-avatar').src = b.avatar || '';
+  document.getElementById('lb-name').textContent = b.name || '';
+  document.getElementById('lb-handle').textContent = '@' + (b.handle || '');
+  document.getElementById('lb-text').textContent = b.text || '';
+  document.getElementById('lb-open').href = b.url || '#';
+
+  const qBtn = document.getElementById('lb-queue-btn');
+  updateLbQueueBtn(qBtn, b.id);
+
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function updateLbQueueBtn(btn, id) {
+  if (pending.has(id)) {
+    btn.className = 'lb-btn queued';
+    btn.innerHTML = '✓ Queued for deletion';
+  } else {
+    btn.className = 'lb-btn danger';
+    btn.innerHTML = '🗑 Queue for deletion';
+  }
+}
+
+function lbToggleQueue() {
+  if (!lbBookmark) return;
+  togglePending(lbBookmark.id);
+  updateLbQueueBtn(document.getElementById('lb-queue-btn'), lbBookmark.id);
+}
+
+function closeLightbox(e) {
+  if (e && e.target !== document.getElementById('lightbox')) return;
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+  lbBookmark = null;
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// ── Pagination (list) ──
 function renderPagination() {
-  const total = Math.ceil(filtered.length / PAGE_SIZE);
+  const total = Math.ceil(filtered.length / LIST_PAGE);
   const el = document.getElementById('pagination');
   if (total <= 1) { el.innerHTML = ''; return; }
   el.innerHTML = `
-    <button class="btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← Prev</button>
+    <button class="btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>← Prev</button>
     <span class="page-info">${currentPage} / ${total}</span>
-    <button class="btn" onclick="goPage(${currentPage + 1})" ${currentPage === total ? 'disabled' : ''}>Next →</button>
-  `;
+    <button class="btn" onclick="goPage(${currentPage+1})" ${currentPage===total?'disabled':''}>Next →</button>`;
 }
 
 function goPage(p) {
-  const total = Math.ceil(filtered.length / PAGE_SIZE);
+  const total = Math.ceil(filtered.length / LIST_PAGE);
   if (p < 1 || p > total) return;
-  currentPage = p;
-  render();
+  currentPage = p; renderList();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ── Search ──
 document.getElementById('search').addEventListener('input', () => {
-  clearTimeout(debTimer);
-  debTimer = setTimeout(filter, 250);
+  clearTimeout(debTimer); debTimer = setTimeout(filter, 250);
 });
 
 // ── Queue ──
+function togglePending(id) {
+  if (pending.has(id)) pending.delete(id); else pending.add(id);
+  savePending();
+}
 function savePending() {
   localStorage.setItem('pending-deletions', JSON.stringify([...pending]));
   updateQueueBar();
 }
-
 function updateQueueBar() {
   const n = pending.size;
   document.getElementById('queue-count').textContent = n.toLocaleString();
-  document.getElementById('queue-bar').classList.toggle('hidden', n === 0);
+  // only show queue bar in list mode
+  if (currentView === 'list') {
+    document.getElementById('queue-bar').classList.toggle('hidden', n === 0);
+  }
 }
-
 function downloadQueue() {
   if (!pending.size) return;
   const blob = new Blob([JSON.stringify([...pending], null, 2)], { type: 'application/json' });
-  const a = Object.assign(document.createElement('a'), {
-    href: URL.createObjectURL(blob), download: 'pending-deletions.json'
-  });
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'pending-deletions.json' });
   a.click(); URL.revokeObjectURL(a.href);
 }
-
 function clearQueue() {
-  pending.clear(); savePending();
-  // Re-render to remove queued state from visible cards
-  render();
+  pending.clear(); savePending(); renderList();
 }
-
 updateQueueBar();
 </script>
 </body>
