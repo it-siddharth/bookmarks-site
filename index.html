@@ -693,7 +693,7 @@ const catLabel = c => c ? c.charAt(0).toUpperCase() + c.slice(1).replace(/-/g,' 
 // ── State ──
 let ALL = [], filtered = [], currentCat = 'all', currentPage = 1, currentView = 'list';
 let gridPage_num = 1;
-const GRID_PAGE = 80, LIST_PAGE = 30;
+const GRID_PAGE = 200, LIST_PAGE = 30;
 let debTimer = null;
 let pending = new Set(JSON.parse(localStorage.getItem('pending-deletions') || '[]'));
 let lbBookmark = null;
@@ -918,8 +918,9 @@ function renderGrid() {
 
   document.getElementById('gp-prev').disabled = gridPage_num <= 1;
   document.getElementById('gp-next').disabled = gridPage_num >= totalPages;
-  document.getElementById('gp-info').textContent = `${gridPage_num} / ${totalPages}  ·  ${src.length.toLocaleString()} bookmarks`;
-  document.getElementById('grid-viewport').scrollTop = 0;
+  document.getElementById('gp-info').textContent = totalPages > 1 ? `${gridPage_num} / ${totalPages}` : '';
+  const vp = document.getElementById('grid-viewport');
+  vp.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 function gridPage(dir) {
